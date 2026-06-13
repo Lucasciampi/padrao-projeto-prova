@@ -17,8 +17,8 @@ class AtendimentoTest {
     void setUp() {
         animal = new Animal("Robson", "Cachorro", false);
         tutor = new Tutor("Carlos", animal);
-        veterinario = new Veterinario("Dra. Ana");
-        recepcao = new Recepcao("Recepção Central");
+        veterinario = new Veterinario("Dra. Veterinaria");
+        recepcao = new Recepcao("Recepcionista");
         ServicoVeterinario servico = new ServicoVeterinario("Consulta", 100.0);
         atendimento = new Atendimento(tutor, servico);
         atendimento.addObserver(tutor);
@@ -87,7 +87,6 @@ class AtendimentoTest {
         assertEquals("EmAtendimento", atendimento.getNomeEstado());
     }
 
-
     @Test
     void deveComunicarTutorAoIniciarAtendimento() {
         atendimento.iniciar();
@@ -97,20 +96,20 @@ class AtendimentoTest {
     @Test
     void deveComunicarVeterinarioAoIniciarAtendimento() {
         atendimento.iniciar();
-        assertEquals("Dra. Ana: Atendimento de Robson foi iniciado.", veterinario.getUltimaNotificacao());
+        assertEquals("Dra. Veterinaria: Atendimento de Robson foi iniciado.", veterinario.getUltimaNotificacao());
     }
 
     @Test
     void deveComunicarVeterinarioAoCancelarAtendimento() {
         atendimento.cancelar();
-        assertEquals("Dra. Ana: Atendimento de Robson foi cancelado.", veterinario.getUltimaNotificacao());
+        assertEquals("Dra. Veterinaria: Atendimento de Robson foi cancelado.", veterinario.getUltimaNotificacao());
     }
 
     @Test
     void deveComunicarRecepcaoAoFinalizarAtendimento() {
         atendimento.iniciar();
         atendimento.finalizar();
-        assertEquals("Recepção Central: Atendimento de Robson foi finalizado.", recepcao.getUltimaNotificacao());
+        assertEquals("Recepcionista: Atendimento de Robson foi finalizado.", recepcao.getUltimaNotificacao());
     }
 
     @Test
@@ -120,8 +119,7 @@ class AtendimentoTest {
         assertNull(veterinario.getUltimaNotificacao());
         assertNull(recepcao.getUltimaNotificacao());
     }
-
-    // Template Method — reação dos funcionários
+    
     @Test
     void deveVeterinarioAbrirProntuarioAoIniciar() {
         atendimento.iniciar();
@@ -154,7 +152,7 @@ class AtendimentoTest {
 
     @Test
     void deveAplicarDescontoParaAnimalAdotado() {
-        Animal animalAdotado = new Animal("Rex", "Cachorro", true);
+        Animal animalAdotado = new Animal("Robson", "Cachorro", true);
         AtendimentoComponente valor = new Desconto(atendimento, animalAdotado);
         assertEquals(90.0, valor.getValor(), 0.01);
         assertEquals("Consulta / Desconto animal adotado", valor.getDescricao());
@@ -190,14 +188,14 @@ class AtendimentoTest {
 
     @Test
     void deveAplicarDescontoETaxaParaAnimalAdotado() {
-        Animal animalAdotado = new Animal("Rex", "Cachorro", true);
+        Animal animalAdotado = new Animal("Robson", "Cachorro", true);
         AtendimentoComponente valor = new Taxa(new Desconto(atendimento, animalAdotado));
         assertEquals(140.0, valor.getValor(), 0.01);
     }
 
     @Test
     void deveAplicarTodosOsDecoradoresParaAnimalAdotado() {
-        Animal animalAdotado = new Animal("Rex", "Cachorro", true);
+        Animal animalAdotado = new Animal("Robson", "Cachorro", true);
         AtendimentoComponente valor = new BanhoPosConsulta(new Taxa(new Desconto(atendimento, animalAdotado)));
         assertEquals(220.0, valor.getValor(), 0.01);
         assertEquals("Consulta / Desconto animal adotado / Taxa domiciliar / Banho pós-consulta", valor.getDescricao());
